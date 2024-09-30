@@ -1,0 +1,29 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Output of the `go build` and `go test`
+/bin/
+/pkg/
+/dist/
+
+# Environment files
+.env
+.env.*
+
+# IDE directories
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Go modules vendor directory
+/vendor/
