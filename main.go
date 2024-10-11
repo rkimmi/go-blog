@@ -3,11 +3,25 @@ package main
 import (
     "blog/photos-blog/cloudinary"
     "net/http"
+    "log"
 )
 
 func main() {
-    cloudinary.Init()
+    initDependencies()
+    runServer()
     setUpEndpoints()
+}
+
+func initDependencies() {
+    cloudinary.Init()
+}
+
+func runServer() {
+    log.Println("Server started at http://localhost:8080")
+
+    if err := http.ListenAndServe(":8080", nil); err != nil {
+        log.Fatalf("Failed to start server: %v", err)
+    }
 }
 
 func setUpEndpoints() {
