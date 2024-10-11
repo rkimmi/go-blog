@@ -6,6 +6,5 @@ import (
 
 func main() {
     cloudinary.Init()
-    
     cloudinary.GetAllImagesInFolder("photos_blog")
 }

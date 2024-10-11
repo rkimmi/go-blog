@@ -1,0 +1,10 @@
+#### Go Blog
+For now, serves /photos-blog within rkimmi.github.io. More features to come ~
+
+### Getting Started
+
+run `go run main.go`
+
+### Project structure
+
+### Notes
