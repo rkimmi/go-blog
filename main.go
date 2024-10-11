@@ -2,9 +2,14 @@ package main
 
 import (
     "blog/photos-blog/cloudinary"
+    "net/http"
 )
 
 func main() {
     cloudinary.Init()
-    cloudinary.GetAllImagesInFolder("photos_blog")
+    setUpEndpoints()
+}
+
+func setUpEndpoints() {
+    http.HandleFunc("/api/thumbnails", cloudinary.GetThumbnailsHandler)
 }
