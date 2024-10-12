@@ -34,6 +34,8 @@ func Init() {
 	if err != nil {
 		log.Fatalf("Failed to initialize Cloudinary: %v", err)
 	}
+
+	log.Println("Cloudinary initialized")
 }
 
 // Returns the Cloudinary instance for use in other parts of the package.
