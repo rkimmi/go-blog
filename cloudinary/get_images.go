@@ -11,10 +11,11 @@ import (
     // cloudinarySDK "github.com/cloudinary/cloudinary-go/v2"
     "github.com/cloudinary/cloudinary-go/v2/api/admin" 
 
-    "blog/photos-blog/cloudinary/models" 
+    "blog/cloudinary/models" 
 )
 
 func GetThumbnailsHandler(w http.ResponseWriter, r *http.Request) {
+    log.Printf("Received %s request for %s", r.Method, r.URL.Path)
     // Extract the 'folder' parameter from the URL query string
     folder := r.URL.Query().Get("folder")
         

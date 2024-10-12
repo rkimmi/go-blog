@@ -1,15 +1,16 @@
 package main
 
 import (
-    "blog/photos-blog/cloudinary"
+    "blog/cloudinary"
     "net/http"
     "log"
 )
 
 func main() {
     initDependencies()
-    runServer()
     setUpEndpoints()
+
+    runServer()
 }
 
 func initDependencies() {

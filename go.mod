@@ -1,4 +1,4 @@
-module blog/photos-blog
+module blog
 
 go 1.23.1
 
