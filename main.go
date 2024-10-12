@@ -48,5 +48,5 @@ func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func setUpEndpoints() {
-	http.HandleFunc("/api/thumbnails", corsMiddleware(photosblog.GetThumbnailsHandler))
+	http.HandleFunc("/api/photos-blog/thumbnails", corsMiddleware(photosblog.GetThumbnailsHandler))
 }

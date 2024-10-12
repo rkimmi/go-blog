@@ -20,8 +20,6 @@ func GetAllImagesInFolder(folderName string) ([]api.BriefAssetResult, error) {
 	// TODO get by folder name!
 	resources, err := cld.Admin.Assets(ctx, admin.AssetsParams{})
 
-	log.Printf("%+v\n", resources)
-
 	if len(resources.Assets) == 0 {
 		log.Println("No images found in the folder:", folderName)
 	}

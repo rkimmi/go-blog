@@ -10,14 +10,8 @@ import (
 
 func GetThumbnailsHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received %s request for %s", r.Method, r.URL.Path)
-	// Extract the 'folder' parameter from the URL query string
-	folder := r.URL.Query().Get("folder")
 
-	if folder == "" {
-		// If no folder is provided, return a bad request response
-		http.Error(w, "Missing folder parameter", http.StatusBadRequest)
-		return
-	}
+	folder := "photos-blog"
 
 	// Call the function to get all images in the specified folder
 	images, err := cloudinary.GetAllImagesInFolder(folder)
