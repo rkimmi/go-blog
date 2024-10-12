@@ -15,8 +15,11 @@ COPY . .
 # Build the application and output the binary as '/blog'
 RUN go build -v -o /blog .
 
-# Use a minimal image for the final stage (Debian Bookworm)
-FROM debian:bookworm
+# Final stage: Use Alpine for the runtime environment
+FROM alpine:latest
+
+# Install CA certificates to verify HTTPS connections
+RUN apk add --no-cache ca-certificates
 
 # Copy the binary from the builder stage
 COPY --from=builder /blog /usr/local/bin/
