@@ -18,6 +18,9 @@ RUN go build -v -o /blog .
 # Use a minimal image for the final stage (Debian Bookworm)
 FROM debian:bookworm
 
+# Install CA certificates in the final stage
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+
 # Copy the binary from the builder stage
 COPY --from=builder /blog /usr/local/bin/
 
