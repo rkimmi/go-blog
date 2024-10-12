@@ -10,6 +10,10 @@ run `go mod tidy`
 run `go build`
 run `./blog`
 
+### Deploy
+From CLI:
+run `flyctl deploy`
+
 ### Project structure
 ./cloudinary - contains code related to interacting with the cloudinary sdk for retrieving images.
 ./photos-blog - contains handlers and types for getting photo data 
