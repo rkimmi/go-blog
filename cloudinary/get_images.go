@@ -1,87 +1,38 @@
 package cloudinary
 
 import (
-    "context"
-    "fmt"
-    "log"
-    "net/http"
-    "encoding/json"
-    "reflect"
+	"context"
+	"log"
 
-    // cloudinarySDK "github.com/cloudinary/cloudinary-go/v2"
-    "github.com/cloudinary/cloudinary-go/v2/api/admin" 
-
-    "blog/cloudinary/models" 
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin"
 )
 
-func GetThumbnailsHandler(w http.ResponseWriter, r *http.Request) {
-    log.Printf("Received %s request for %s", r.Method, r.URL.Path)
-    // Extract the 'folder' parameter from the URL query string
-    folder := r.URL.Query().Get("folder")
-        
-    if folder == "" {
-        // If no folder is provided, return a bad request response
-        http.Error(w, "Missing folder parameter", http.StatusBadRequest)
-        return
-    }
+func GetAllImagesInFolder(folderName string) ([]api.BriefAssetResult, error) {
+	log.Println("Getting images in folder", folderName)
 
-    // Call the function to get all images in the specified folder
-    images, err := GetAllImagesInFolder(folder)
-    if err != nil {
-        http.Error(w, fmt.Sprintf("Error retrieving images: %v", err), http.StatusInternalServerError)
-        return
-    }
+	cld := GetCloudinary()
 
-    // Set the response content type to JSON
-    w.Header().Set("Content-Type", "application/json")
+	// Create a context
+	ctx := context.Background()
+	// TODO get by folder name!
+	resources, err := cld.Admin.Assets(ctx, admin.AssetsParams{})
 
-    // Return the list of images as JSON
-    if err := json.NewEncoder(w).Encode(images); err != nil {
-        http.Error(w, "Failed to encode response", http.StatusInternalServerError)
-        return
-    }
-}
+	log.Printf("%+v\n", resources)
 
-// TODO get thumbnail urls rather than full size
-func GetAllImagesInFolder(folderName string) (cloudinarymodels.GetThumbnailsResponse, error) {
-    fmt.Println("Getting images in folder", folderName)
+	if len(resources.Assets) == 0 {
+		log.Println("No images found in the folder:", folderName)
+	}
 
-    cld := GetCloudinary()
+	log.Printf("Total assets found: %d\n", len(resources.Assets))
 
-    // Create a context
-    ctx := context.Background()
-    // TODO get by folder name!
-    resources, err := cld.Admin.Assets(ctx, admin.AssetsParams{})
+	if err != nil {
+		log.Fatalf("Failed to list resources: %v", err)
+	}
 
-    if len(resources.Assets) == 0 {
-        fmt.Println("No images found in the folder:", folderName)
-    }
-    
-    fmt.Printf("Total assets found: %d\n", len(resources.Assets))
+	for _, asset := range resources.Assets {
+		log.Println("Image URL:", asset.SecureURL)
+	}
 
-    if err != nil {
-        log.Fatalf("Failed to list resources: %v", err)
-    }
-
-    for _, asset := range resources.Assets {
-        fmt.Println("Image URL:", asset.SecureURL)
-    }
-
-    thumbnails := []cloudinarymodels.ImageThumbnail{}
-
-    for _, resource := range resources.Assets {
-        fmt.Printf("Resource: %+v\n", resource)
-
-        // Print the type of the resource
-        fmt.Printf("Type of resource: %v\n", reflect.TypeOf(resource))
-        
-        thumbnails = append(thumbnails, cloudinarymodels.ImageThumbnail{
-            ID:  resource.PublicID, 
-            URL: resource.SecureURL,
-        })
-    }
-
-    return cloudinarymodels.GetThumbnailsResponse{
-        Images: thumbnails,
-    }, nil
+	return resources.Assets, nil
 }

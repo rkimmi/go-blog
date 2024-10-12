@@ -2,6 +2,7 @@ package main
 
 import (
     "blog/cloudinary"
+    "blog/photos-blog"
     "net/http"
     "log"
 )
@@ -26,5 +27,5 @@ func runServer() {
 }
 
 func setUpEndpoints() {
-    http.HandleFunc("/api/thumbnails", cloudinary.GetThumbnailsHandler)
+    http.HandleFunc("/api/thumbnails", photosblog.GetThumbnailsHandler)
 }
