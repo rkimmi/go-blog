@@ -1,11 +1,11 @@
 package main
 
 import (
-	"blog/cloudinary"
 	"log"
 	"net/http"
 	"strings"
 
+	cloudinary "blog/cloudinary"
 	photosblog "blog/photos-blog"
 )
 
