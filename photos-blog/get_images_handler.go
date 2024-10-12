@@ -1,13 +1,11 @@
 package photosblog
 
 import (
+	"blog/cloudinary"
+	imagemodels "blog/photos-blog/models"
 	"encoding/json"
 	"log"
 	"net/http"
-	"reflect"
-
-	"blog/cloudinary"
-	imagemodels "blog/photos-blog/models"
 )
 
 func GetThumbnailsHandler(w http.ResponseWriter, r *http.Request) {
@@ -32,10 +30,6 @@ func GetThumbnailsHandler(w http.ResponseWriter, r *http.Request) {
 	thumbnails := []imagemodels.ImageThumbnail{}
 
 	for _, resource := range images {
-		log.Printf("Resource: %+v\n", resource)
-
-		// Print the type of the resource
-		log.Printf("Type of resource: %v\n", reflect.TypeOf(resource))
 
 		thumbnails = append(thumbnails, imagemodels.ImageThumbnail{
 			ID:  resource.PublicID,
