@@ -1,11 +1,12 @@
 package photosblog
 
 import (
-	"blog/cloudinary"
-	imagemodels "blog/photos-blog/models"
 	"encoding/json"
 	"log"
 	"net/http"
+
+	cloudinary "blog/cloudinary"
+	imagemodels "blog/photos-blog/models"
 )
 
 func GetThumbnailsHandler(w http.ResponseWriter, r *http.Request) {
