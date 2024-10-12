@@ -1,29 +1,28 @@
-FROM golang:1.20-alpine AS builder
+# Use the official Golang image for building
+ARG GO_VERSION=1
+FROM golang:${GO_VERSION}-bookworm as builder
 
-# Install build dependencies, including git (if needed for Go modules)
-RUN apk add --no-cache git
-
-# Set up the build environment
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy go.mod and go.sum to install dependencies first
+# Copy go.mod and go.sum files to download dependencies
 COPY go.mod go.sum ./
-RUN go mod download
+RUN go mod download && go mod verify
 
-# Copy the rest of the application code and build it
+# Copy the entire application code to the container
 COPY . .
-RUN go build -o /app/blog .
 
-# Final stage: Use Alpine for the runtime environment
-FROM alpine:latest
+# Build the application and output the binary as '/blog'
+RUN go build -v -o /blog .
 
-# Install CA certificates to verify HTTPS connections
-RUN apk add --no-cache ca-certificates
+# Use a minimal image for the final stage (Debian Bookworm)
+FROM debian:bookworm
 
-# Set working directory and copy the Go binary from the builder stage
-WORKDIR /root/
-COPY --from=builder /app/blog .
+# Copy the binary from the builder stage
+COPY --from=builder /blog /usr/local/bin/
 
-# Expose the application port and run the binary
+# Expose the port your app listens on, if needed
 EXPOSE 8080
-CMD ["./blog"]
+
+# Set the command to run the binary
+CMD ["/usr/local/bin/blog"]
