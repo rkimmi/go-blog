@@ -8,6 +8,7 @@ import (
 	"github.com/cloudinary/cloudinary-go/v2/api/admin"
 )
 
+// TODO getting getting thumbnail urls rather than full size
 func GetAllImagesInFolder(folderName string) ([]api.BriefAssetResult, error) {
 	log.Println("Getting images in folder", folderName)
 

@@ -12,6 +12,7 @@ run `./blog`
 
 ### Project structure
 ./cloudinary - contains code related to interacting with the cloudinary sdk for retrieving images.
+./photos-blog - contains handlers and types for getting photo data 
 
 ### Notes
 run `go clean -cache` if you're seeing a stale state of the app running. 
