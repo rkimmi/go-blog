@@ -12,7 +12,13 @@ import (
 var cld *cloudinary.Cloudinary
 
 func Init() {
-	// Load environment variables from the .env file
+	log.Println("Starting Cloudinary initialization...")
+
+	cloudinaryURL := os.Getenv("CLOUDINARY_URL")
+	if cloudinaryURL == "" {
+		log.Fatal("CLOUDINARY_URL environment variable is missing")
+	}
+
 	if os.Getenv("FLY_APP_NAME") == "" {
 		log.Println("Running locally, loading .env file...")
 		envErr := godotenv.Load()
@@ -21,11 +27,6 @@ func Init() {
 		}
 	} else {
 		log.Println("Running on Fly.io, using environment variables...")
-	}
-
-	cloudinaryURL := os.Getenv("CLOUDINARY_URL")
-	if cloudinaryURL == "" {
-		log.Fatalf("CLOUDINARY_URL not set in environment")
 	}
 
 	// Initialize Cloudinary

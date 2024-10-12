@@ -22,6 +22,7 @@ run `flyctl status` to see the status of all processes
 run `flyctl machine status <ID> to see details status' of a single process.
 
 ##### Run docker file
+NOTE: WIP there is a bug with .env files not loading when running docker locally.
 Run the deployment docker file locally to see any errors thrown during build:
 docker build -t blog .
 docker run -p 8080:8080 blog
