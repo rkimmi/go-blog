@@ -14,6 +14,18 @@ run `./blog`
 From CLI:
 run `flyctl deploy`
 
+#### Deployment troubleshooting
+
+##### Check fly.io status' and logs
+
+run `flyctl status` to see the status of all processes
+run `flyctl machine status <ID> to see details status' of a single process.
+
+##### Run docker file
+Run the deployment docker file locally to see any errors thrown during build:
+docker build -t blog .
+docker run -p 8080:8080 blog
+
 ### Project structure
 ./cloudinary - contains code related to interacting with the cloudinary sdk for retrieving images.
 ./photos-blog - contains handlers and types for getting photo data 
