@@ -9,8 +9,9 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/cloudinary/cloudinary-go/v2"
-	"github.com/cloudinary/cloudinary-go/v2/api"
 	"github.com/cloudinary/cloudinary-go/v2/api/admin"
+
+	cloudinarymodels "blog/cloudinary/models"
 )
 
 // Cloudinary instance to be used across the package
@@ -44,16 +45,21 @@ func Init() {
 	log.Println("Cloudinary initialized")
 }
 
-func GetAllImagesInFolder(folderName string) ([]api.BriefAssetResult, error) {
-	log.Println("Getting images in folder", folderName)
+func GetAllImagesInFolder(folderName string) (cloudinarymodels.ThumbnailsResponse, error) {
+	log.Println("Getting images in foldfdfder", folderName)
 
 	cld := GetCloudinary()
 
 	// Create a context
 	ctx := context.Background()
 
+	log.Println("jelllooo", folderName)
+
 	// TODO get by folder name!
-	resources, err := cld.Admin.Assets(ctx, admin.AssetsParams{})
+	// TODO pagination with nextcursor
+	resources, err := cld.Admin.Assets(ctx, admin.AssetsParams{
+		MaxResults: 40,
+	})
 
 	if len(resources.Assets) == 0 {
 		log.Println("No images found in the folder:", folderName)
@@ -63,7 +69,10 @@ func GetAllImagesInFolder(folderName string) ([]api.BriefAssetResult, error) {
 		log.Fatalf("Failed to list resources: %v", err)
 	}
 
-	return resources.Assets, nil
+	return cloudinarymodels.ThumbnailsResponse{
+		Assets:     resources.Assets,
+		NextCursor: resources.NextCursor,
+	}, nil
 }
 
 // Returns the Cloudinary instance for use in other parts of the package.
