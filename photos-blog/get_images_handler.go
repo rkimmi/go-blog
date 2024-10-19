@@ -15,7 +15,7 @@ func GetThumbnailsHandler(w http.ResponseWriter, r *http.Request) {
 	folder := "photos-blog"
 
 	// Call the function to get all images in the specified folder
-	images, err := cloudinary.GetAllImagesInFolder(folder)
+	resources, err := cloudinary.GetAllImagesInFolder(folder)
 	if err != nil {
 		http.Error(w, "Error retrieving images: %v", http.StatusInternalServerError)
 
@@ -24,7 +24,7 @@ func GetThumbnailsHandler(w http.ResponseWriter, r *http.Request) {
 
 	thumbnails := []imagemodels.ImageThumbnail{}
 
-	for _, resource := range images {
+	for _, resource := range resources.Assets {
 
 		thumbnails = append(thumbnails, imagemodels.ImageThumbnail{
 			ID:  resource.PublicID,

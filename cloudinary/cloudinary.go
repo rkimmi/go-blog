@@ -53,8 +53,6 @@ func GetAllImagesInFolder(folderName string) (cloudinarymodels.ThumbnailsRespons
 	// Create a context
 	ctx := context.Background()
 
-	log.Println("jelllooo", folderName)
-
 	// TODO get by folder name!
 	// TODO pagination with nextcursor
 	resources, err := cld.Admin.Assets(ctx, admin.AssetsParams{
