@@ -7,5 +7,5 @@ type ImageThumbnail struct {
 
 type GetThumbnailsResponse struct {
 	Images         []ImageThumbnail `json:"images"`
-	NextImageStart string
+	NextImageStart string           `json:"nextPageStart"`
 }
