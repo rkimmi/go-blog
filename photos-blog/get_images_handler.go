@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	cloudinary "blog/cloudinary"
 	imagemodels "blog/photos-blog/models"
@@ -11,11 +12,22 @@ import (
 
 func GetThumbnailsHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received %s request for %s", r.Method, r.URL.Path)
+	queryParams := r.URL.Query()
 
-	folder := "photos-blog"
+	folder := queryParams.Get("folder")
+	if folder == "" {
+		folder = "photos-blog"
+	}
 
-	// Call the function to get all images in the specified folder
-	resources, err := cloudinary.GetAllImagesInFolder(folder)
+	limitStr := queryParams.Get("limit")
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil || limit <= 0 {
+		limit = 20
+	}
+
+	nextImageStartKey := queryParams.Get("startKey")
+	resources, err := cloudinary.GetAllImagesInFolder(limit, nextImageStartKey, folder)
+
 	if err != nil {
 		http.Error(w, "Error retrieving images: %v", http.StatusInternalServerError)
 

@@ -45,7 +45,7 @@ func Init() {
 	log.Println("Cloudinary initialized")
 }
 
-func GetAllImagesInFolder(folderName string) (cloudinarymodels.ThumbnailsResponse, error) {
+func GetAllImagesInFolder(limit int, imageStartKey string, folderName string) (cloudinarymodels.ThumbnailsResponse, error) {
 	log.Println("Getting images in foldfdfder", folderName)
 
 	cld := GetCloudinary()
@@ -56,7 +56,8 @@ func GetAllImagesInFolder(folderName string) (cloudinarymodels.ThumbnailsRespons
 	// TODO get by folder name!
 	// TODO pagination with nextcursor
 	resources, err := cld.Admin.Assets(ctx, admin.AssetsParams{
-		MaxResults: 20,
+		MaxResults: limit,
+		NextCursor: imageStartKey,
 	})
 
 	if len(resources.Assets) == 0 {
