@@ -56,7 +56,7 @@ func GetAllImagesInFolder(folderName string) (cloudinarymodels.ThumbnailsRespons
 	// TODO get by folder name!
 	// TODO pagination with nextcursor
 	resources, err := cld.Admin.Assets(ctx, admin.AssetsParams{
-		MaxResults: 40,
+		MaxResults: 20,
 	})
 
 	if len(resources.Assets) == 0 {

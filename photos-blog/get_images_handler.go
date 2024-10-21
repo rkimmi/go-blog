@@ -33,7 +33,8 @@ func GetThumbnailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := imagemodels.GetThumbnailsResponse{
-		Images: thumbnails,
+		Images:         thumbnails,
+		NextImageStart: resources.NextCursor,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
