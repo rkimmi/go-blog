@@ -26,7 +26,7 @@ func GetThumbnailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	nextImageStartKey := queryParams.Get("startKey")
-	resources, err := cloudinary.GetAllImagesInFolder(limit, nextImageStartKey, folder)
+	resources, err := cloudinary.GetImages(limit, nextImageStartKey, folder)
 
 	if err != nil {
 		http.Error(w, "Error retrieving images: %v", http.StatusInternalServerError)

@@ -3,6 +3,7 @@ package cloudinary
 import (
 	"log"
 	"os"
+	"sync"
 
 	"context"
 
@@ -16,6 +17,10 @@ import (
 
 // Cloudinary instance to be used across the package
 var cld *cloudinary.Cloudinary
+
+// In-memory cache for image responses
+var imageCache = make(map[string]cloudinarymodels.ThumbnailsResponse)
+var cacheMutex sync.RWMutex
 
 func Init() {
 	log.Println("Starting Cloudinary initialization...")
@@ -45,16 +50,26 @@ func Init() {
 	log.Println("Cloudinary initialized")
 }
 
-func GetAllImagesInFolder(limit int, imageStartKey string, folderName string) (cloudinarymodels.ThumbnailsResponse, error) {
-	log.Println("Getting images in foldfdfder", folderName)
+func GetImages(limit int, imageStartKey string, folderName string) (cloudinarymodels.ThumbnailsResponse, error) {
+	log.Println("Getting images in folder", folderName)
 
 	cld := GetCloudinary()
 
 	// Create a context
 	ctx := context.Background()
 
+	if (len(imageStartKey) == 0) {
+		// Try to get first images from cache
+		cacheMutex.RLock()
+		if cached, found := imageCache["startImages"]; found {
+			cacheMutex.RUnlock()
+			log.Println("Returning cached images for startImages")
+			return cached, nil
+		}
+		cacheMutex.RUnlock()
+	}
+
 	// TODO get by folder name!
-	// TODO pagination with nextcursor
 	resources, err := cld.Admin.Assets(ctx, admin.AssetsParams{
 		MaxResults: limit,
 		NextCursor: imageStartKey,
@@ -68,10 +83,20 @@ func GetAllImagesInFolder(limit int, imageStartKey string, folderName string) (c
 		log.Fatalf("Failed to list resources: %v", err)
 	}
 
-	return cloudinarymodels.ThumbnailsResponse{
+	response := cloudinarymodels.ThumbnailsResponse{
 		Assets:     resources.Assets,
 		NextCursor: resources.NextCursor,
-	}, nil
+	}
+
+	if (len(imageStartKey) == 0) {
+		// Cache initial images for quick load next time
+		cacheMutex.Lock()
+		imageCache["startImages"] = response
+		cacheMutex.Unlock()
+		log.Println("Cached images for startImages")
+	}
+
+	return response, nil
 }
 
 // Returns the Cloudinary instance for use in other parts of the package.
